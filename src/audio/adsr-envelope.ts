@@ -36,6 +36,10 @@ export class AdsrEnvelope {
     this.sample = 0
   }
 
+  get active() {
+    return this._on || this.amplitude > 0
+  }
+
   advance() {
     this.sample++
   }

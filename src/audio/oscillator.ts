@@ -2,7 +2,7 @@ import { AdsrEnvelope } from './adsr-envelope'
 import { DEFAULT_SAMPLE_RATE } from './constants'
 
 export interface OscillatorOpts {
-  shape: 'sine' | 'square'
+  shape: 'sine' | 'square' | 'saw' | 'tri'
   freq: number
   amp: number
 }
@@ -29,12 +29,19 @@ export class Oscillator {
       case 'square':
         this.o = a => Math.sign(Math.sin(a))
         break
+      case 'saw':
+        this.o = a => ((a / Math.PI) % 2) - 1
+        break
+      case 'tri':
+        this.o = a => 1 - 2 * Math.abs(((a / Math.PI) % 2) - 1)
+        break
     }
     this.s = (2 * Math.PI * opts.freq) / rate
     this.a = opts.amp
   }
 
   process(output: Float32Array) {
+    if (!this.active) return
     for (let i = 0; i < output.length; i++) {
       const amp = this.a * this.envelope.amplitude
       output[i] += amp * this.o(this.phase + this._bend * this.s * i)
@@ -55,6 +62,10 @@ export class Oscillator {
 
   set bend(bend: number) {
     this._bend = relativeFrequencyForMidiKey(bend)
+  }
+
+  get active() {
+    return this.envelope.active
   }
 }
 

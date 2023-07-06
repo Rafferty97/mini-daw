@@ -1,4 +1,6 @@
-export type MidiEvent = MidiNoteEvent | MidiPitchBendEvent
+import { OscillatorOpts } from './oscillator'
+
+export type MidiEvent = MidiNoteEvent | MidiPitchBendEvent | ControlEvent
 
 export interface MidiNoteEvent {
   kind: 'note'
@@ -10,4 +12,9 @@ export interface MidiNoteEvent {
 export interface MidiPitchBendEvent {
   kind: 'bend'
   bend: number
+}
+
+export interface ControlEvent {
+  kind: 'control'
+  shape?: OscillatorOpts['shape']
 }

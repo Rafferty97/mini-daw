@@ -1,0 +1,8 @@
+.oscilloscope {
+  display: block;
+  width: 800px;
+  height: 300px;
+  margin: 60px auto;
+  background: #333;
+  border-radius: 12px;
+}
